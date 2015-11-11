@@ -1,0 +1,221 @@
+//*******************************************
+//		VARIABLES
+//*******************************************/
+
+
+// DEFAULT PALETTE
+//*******************************************/
+$neutro-dominante: #333 !default;
+$neutro-subordinado-1: #545454 !default;
+$neutro-subordinado-2: #7E7C7D !default;
+$neutro-acento-1: #d6af88 !default;
+$neutro-acento-2: #c2ac96 !default;
+
+
+// BRAND DEFAULT PALETTE
+//*******************************************/
+$color-dominante: 		$neutro-dominante !default;
+$color-subordinado-1: $neutro-subordinado-1 !default;
+$color-subordinado-2: $neutro-subordinado-2 !default;
+$color-acento-1: 		$neutro-acento-1 !default;
+$color-acento-2: 		$neutro-acento-2 !default;
+
+
+
+//*******************************************
+//	GROUPS
+//*******************************************/
+$nav-default: $color-acento-1 !default;
+$nav-principal: $color-dominante !default;
+$nav-secondary: $color-acento-1 !default;
+
+
+
+//*******************************************
+// 	GLOBALS
+//*******************************************/
+
+// BACKGROUND
+
+// BODY BACKGROUND
+$body-bg-color: transparent !default;
+$body-bg-image: false !default;
+$body-bg-image-repeat: no-repeat !default;
+$body-bg-image-position: center top !default;
+$body-bg-size: false !default;
+
+// HEADER BACKGROUND
+$header-bg-color: transparent !default;
+$header-bg-image: false !default;
+$header-bg-image-repeat: no-repeat !default;
+$header-bg-image-position: center top !default;
+$header-bg-size: false !default;
+
+// MAIN CONTENT BACKGROUND
+$mcontent-bg-color: transparent !default;
+$mcontent-bg-image: false !default;
+$mcontent-bg-image-repeat: no-repeat !default;
+$mcontent-bg-image-position: center top !default;
+$mcontent-bg-size: false !default;
+
+// FOOTER BACKGROUND
+$footer-bg-color: transparent !default;
+$footer-bg-image: false !default;
+$footer-bg-image-repeat: no-repeat !default;
+$footer-bg-image-position: center top !default;
+$footer-bg-size: false !default;
+
+
+// TYPOGRAPHY
+$g-font-primary: 	Arial, Helvetica, sans-serif !default;
+$g-font-secondary:  Georgia, Times, Times New Roman, serif !default;
+
+$g-font: 			$g-font-primary !default;
+$g-font-size: 		14px !default;
+$g-line-height:		$g-font-size * 1.2 !default;
+$g-font-color:		$color-dominante !default;
+
+$small-font-size: .85em !default;
+$medium-font-size: 1.25em !default;
+$large-font-size: 1.85em !default;
+
+
+// HEADINGS
+$g-title: $g-font-color !default;
+$g-title-h1: $g-title;
+$g-title-h2: $g-title;
+$g-title-h3: $g-title;
+$g-title-h4: $g-title;
+$g-title-h5: $g-title;
+$g-title-h6: $g-title;
+
+
+// FORMS
+$form-primary-bg: $color-subordinado-2 !default;
+$form-font-color: color-contrast($form-primary-bg) !default;
+$form-input-bg: #fff !default;
+$form-input-font-color: color-contrast($form-input-bg) !default;
+$form-input-font-case: initial !default;
+$form-input-font-weight: normal !default;
+$form-input-border-width: 2px !default;
+$form-input-border-color: $color-dominante !default;
+$form-input-focus-color: $color-acento-1 !default;
+$form-legend-font-color: desaturate($form-input-focus-color, 40%) !default;
+
+
+// LINKS
+$links-color: $nav-default !default;
+$links-hover: darken( $links-color, 10%) !default;
+$links-visited: darken( $links-color, 10%) !default;
+$links-focus: darken( $links-color, 15%) !default;
+
+
+// BUTTONS
+$button-primary-color: $color-acento-1 !default;
+$button-primary-font-color: color-contrast($button-primary-color) !default;
+$button-primary-font-case: uppercase !default;
+
+$button-secondary-color: $color-subordinado-1 !default;
+$button-secondary-font-color: color-contrast($button-secondary-color) !default;
+$button-secondary-font-case: uppercase !default;
+
+//*******************************************
+//	PAGES
+//*******************************************/
+
+// LOGIN BACKGROUND
+$login-bg-color: $body-bg-color !default;
+$login-bg-image: $body-bg-image !default;
+$login-bg-image-repeat: $body-bg-image-repeat !default;
+$login-bg-image-position: $body-bg-image-position !default;
+$login-bg-size: $body-bg-size !default;
+
+//*******************************************
+//	COMPONENTS
+//*******************************************/
+// LOGO
+$site-title-color: $g-title !default;
+$site-title-font-size: $large-font-size !default;
+
+// FORM LOGIN
+$login-form-bg: true !default;
+$login-form-bg-color: $form-primary-bg !default;
+ 
+// MAIN NAVIGATION
+$mmenu-bg: $color-dominante !default;
+$mmenu-font: $g-font-primary !default;
+$mmenu-font-size: $small-font-size !default;
+$mmenu-font-color: color-contrast($mmenu-bg, darken($mmenu-bg, 75%), lighten($mmenu-bg, 100%) ) !default;
+$mmenu-font-style: normal !default;
+$mmenu-font-case: initial !default;
+$mmenu-font-weight: normal !default;
+$mmenu-full-bg: false !default;
+$mmenu-dividers: true !default;
+
+// SUB NAVIGATION
+$mmenu-sub-bg: color-contrast($mmenu-bg, darken($mmenu-bg, 23%), lighten($mmenu-bg, 75%) ) !default;
+$mmenu-sub-font-color: color-contrast($mmenu-sub-bg, darken($mmenu-sub-bg, 45%), lighten($mmenu-sub-bg, 60%) ) !default;
+$mmenu-sub-label-font-case: initial !default;
+$mmenu-sub-label-font-weight: normal !default;
+$mmenu-sub-label-font-style: normal !default;
+$mmenu-sub-item-font-style: normal !default;
+$mmenu-sub-item-font-case: initial !default;
+$mmenu-sub-item-font-weight: normal !default;
+
+$mmenu-sub-alternative: false !default;
+$mmenu-sub-border-width: 2px !default;
+$mmenu-sub-border-color: #fff !default;
+$mmenu-sub-active-color: $links-color !default;
+
+
+// SLIDER
+$slider-full-width: false !default;
+
+
+// BREADCRUMBS
+$bread-item-font: $g-font-primary !default;
+$bread-item-font-size: $small-font-size !default;
+$bread-item-font-color: $g-font-color !default;
+$bread-item-font-active-color: $nav-secondary !default;
+$bread-item-font-style: normal !default;
+$bread-item-font-case: uppercase !default;
+$bread-item-font-weight: bold !default;
+$bread-bg: false !default;
+$bread-bg-color: color-contrast($bread-item-font-color);
+
+// PAGE TITLE
+$title-font-family: $g-font-secondary !default;
+$title-font-color: $g-title !default;
+$title-font-size: $large-font-size !default;
+$title-font-style: italic !default;
+$title-font-case: initial !default;
+$title-font-weight: normal !default;
+
+// BTN DOWNLOAD
+$btn-download-alternative: false !default;
+$btn-download-bg: $button-secondary-color !default;
+
+// SIDEBAR NAVIGATION
+$snav-item-bg: #fff !default;
+$snav-item-active-bg: color-contrast($snav-item-bg, darken($snav-item-bg, 15%), lighten($snav-item-bg, 35%) ) !default;
+$snav-item-font: $g-font-primary !default;
+$snav-item-font-case: initial !default;
+$snav-item-font-style: normal !default;
+$snav-item-font-weight: normal !default;
+$snav-item-color: color-contrast($snav-item-bg, darken($snav-item-bg, 45%), lighten($snav-item-bg, 45%) ) !default;
+$snav-item-border-top: true !default;
+$snav-item-border-right: false !default;
+$snav-item-border-bottom: true !default;
+$snav-item-border-left: false !default;
+$snav-item-border-width: 1px !default;
+$snav-item-border-color: $snav-item-color !default;
+$snav-item-border-style: solid !default;
+$snav-item-active-color: $nav-secondary !default;
+$snav-item-active-border: $snav-item-active-color !default;
+
+// ACCORDION
+$panel-title-font: $g-font-primary !default;
+$panel-title-font-size: $medium-font-size !default;
+$panel-title-font-color: $g-font-color !default;
+$panel-title-font-weight: normal !default;
+$panel-title-font-case: initial !default;

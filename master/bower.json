@@ -1,0 +1,31 @@
+{
+  "name": "web-boilerplate",
+  "version": "1.1.0",
+  "authors": [
+    "Lucas Dasso <lucas.dasso@c238.com.ar>"
+  ],
+  "moduleType": [
+    "node"
+  ],
+  "license": "ISC",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src/vendors",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "bootstrap-sass": "~3.3.5"
+  },
+  "dependencies": {
+    "jquery-validation": "~1.14.0",
+    "better-input-file": "*",
+    "bootstrap-select": "~1.7.3",
+    "html5shiv": "~3.7.2",
+    "jquery": "1.11.3",
+    "respond": "Respond#~1.4.2",
+    "slick.js": "~1.5.8"
+  }
+}

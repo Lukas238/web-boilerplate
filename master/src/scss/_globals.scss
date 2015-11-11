@@ -1,0 +1,325 @@
+﻿/**********************
+	GLOBALS
+***********************/
+ 
+article,
+aside,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu, 
+nav,
+section {
+	display: block;
+}
+ 
+html,
+body,
+form{
+	padding: 0;
+	margin: 0; 
+	height: 100%;
+}
+
+
+
+/***********************
+	HELPERS
+***********************/
+
+.clearfix {
+  *zoom: 1;
+  &:before,
+  &:after {
+    display: table;
+    content: "";
+    line-height: 0;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+
+.wrap{
+	@include make-row;
+}
+
+
+/*************************
+	STYLES
+**************************/
+body{
+	@include background;
+	
+	font-family: $g-font;
+	font-size: $g-font-size;
+	color: $g-font-color;
+	//line-height: $g-line-height;
+}
+
+h1{
+	color: $g-title-h1;
+	font-family: $g-font;
+	font-size: $large-font-size;
+
+	
+}
+
+
+h2{
+	color: $g-title-h2;
+	font-family: $g-font-secondary;
+	font-size: 1.57em;
+	font-style: $title-font-style;
+	margin: 25px 0 15px 0;
+
+
+	a{
+		color: inherit;
+		text-decoration: none;
+
+		&:hover{
+			color: inherit;
+			text-decoration:none;
+		}
+	}
+}
+
+
+
+h3{
+	color: $g-title-h3;
+	font-family: $g-font-secondary;
+	font-size: 1.4em;
+	font-style: $title-font-style;
+
+	&:first-child {
+		margin-top:0;
+	}
+}
+
+h4, h5, h6 {
+	color: $g-title-h4;
+	font-size: $medium-font-size;
+
+	&:first-child {
+		margin-top:0;
+	}
+}
+
+p{
+	color: $g-font-color;
+	
+}
+
+em{
+	font-family: $g-font-secondary;
+}
+
+blockquote{
+
+	color: color-contrast($g-font-color, darken($g-font-color, 15%), lighten($g-font-color, 15%) );
+	border-left: 4px solid $color-acento-1;
+	font-family: $g-font-secondary;
+	font-size: $medium-font-size;
+	font-style: italic;
+	margin:20px 0;
+	padding:5px 15px;
+}
+
+
+
+
+a{
+	color: $links-color;
+	text-decoration: underline;
+
+	&:hover{
+		color: $links-hover;
+	}
+
+	&:visited{
+		color: $links-visited;
+	}
+
+	&:focus{
+		color: $links-focus;
+	}
+}	
+
+
+
+
+.btn{
+	display: inline-block;
+	padding: 6px 12px;
+	margin-bottom: 0;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.42857143;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-ms-touch-action: manipulation;
+	touch-action: manipulation;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	background-image: none;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	&:focus{
+		outline:0;
+	}
+}
+
+.btn{
+	text-transform:uppercase;
+	border-radius: 1.5em;
+	padding: .7em 1.5em;
+	
+}
+
+button,
+.bootstrap-select .dropdown-toggle{
+	&:focus{
+		outline: 0 !important;
+	}
+}
+
+
+input{
+	&[type="text"],
+	&[type="password"],
+	&[type="tel"],
+	&[type="mail"]{
+		@include placeholder {
+			color: $form-input-font-color;
+			text-transform: $form-input-font-case;
+			font-style:italic;
+		}
+		background-color: $form-input-bg;
+		border-width: $form-input-border-width;
+		border-color: $form-input-border-color;
+		border-style: solid;
+		color: $form-input-font-color;
+		font-weight: $form-input-font-weight;
+		height: 40px;
+		margin-bottom:15px;
+		padding: 0 15px;
+		text-transform: $form-input-font-case;
+		width:100%;
+
+		&:focus,
+		&:active{
+			@include placeholder {
+				color: $form-input-focus-color;
+				text-transform: $form-input-font-case;
+			}
+			color: $form-input-focus-color;
+			outline: none;
+			border-width: $form-input-border-width;
+			border-color: $form-input-focus-color;
+			border-style: solid;
+		}
+
+		&.form-error{
+			border-color: #df0808;
+		}
+	}
+
+	&[type="radio"]{
+		height:20px;
+		margin-right: 10px;
+		margin-top: 0;
+		width:20px;
+
+		&:focus,
+		&:active{
+			outline: none;
+		}
+	}
+}
+
+legend {
+	color: $form-legend-font-color;
+}	
+	
+	
+.colorpicker-element .input-group-addon i, .colorpicker-element .add-on i {
+    box-shadow: inset 0 0 1px 0px rgba(0,0,0, .5);
+}
+
+.alert{
+	margin-top: 1em;
+	line-height: 1.5em;
+
+	&.alert-success:before{
+		content:'\f058';
+		font-family: FontAwesome;
+		font-size: 1.3em;
+	}
+
+	&.alert-danger:before{
+		content:'\f057';
+		font-family: FontAwesome;
+		font-size: 1.3em;
+	}
+
+	&.alert-info:before{
+		content:'\f06a';
+		font-family: FontAwesome;
+		font-size: 1.3em;
+	}
+}	
+
+.tooltip-inner{
+	max-width: 100%;
+	background-color: $neutro-subordinado-1;
+}
+
+.tooltip.bottom .tooltip-arrow{
+	border-bottom-color: $neutro-subordinado-1;
+}
+	
+	
+	
+	
+
+.form-group.error{
+	label{
+		color: red;
+	}
+	.error-box{
+		display: block;
+		position: relative;
+		.tooltip{
+			display: block;
+			opacity: 1;
+			top: 100%;
+			left: 50%;
+			width: 200px;
+			margin-left: -100px;
+			margin-top: -1px;
+			label{
+				color: #fff;
+			}
+		}
+		input{
+			&[type="text"],
+			&[type="password"],
+			&[type="tel"],
+			&[type="mail"]{
+				border-color: red;
+				@include placeholder {
+					color: red;
+				}
+			}
+		}
+	}
+}

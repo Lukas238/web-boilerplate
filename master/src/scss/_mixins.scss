@@ -1,0 +1,134 @@
+//**********************
+//	MIXINS
+//***********************/
+@mixin reset-button(){
+	border: none;
+	background: none !important;
+	padding: 0;
+	box-shadow: none;
+	&:focus{
+		outline:0;
+	}
+}
+
+@mixin reset-input(){
+	border: none;
+	box-shadow: none;
+	&:focus{
+		outline:0;
+	}
+}
+
+@mixin btn{
+	display: inline-block;
+	padding: 6px 12px;
+	margin-bottom: 0;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.42857143;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-ms-touch-action: manipulation;
+	touch-action: manipulation;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	background-image: none;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	&:focus{
+		outline:0;
+	}
+}
+
+@mixin btn-ham{
+	font-size: 2em;
+	color: $color-2;
+	&:hover,
+	&:focus{
+		text-decoration: none;
+	}
+}
+
+@mixin placeholder(){
+	&::-webkit-input-placeholder {@content}
+	&:-moz-placeholder           {@content}
+	&::-moz-placeholder          {@content}
+	&:-ms-input-placeholder      {@content}
+}
+
+
+@mixin background($image: $body-bg-image, $color: $body-bg-color, $repeat: $body-bg-image-repeat, $position: $body-bg-image-position, $size:$body-bg-size ){
+  background: unquote(if($image != false, 'url("'+ $image +'") '+ $repeat +' '+ $position, $color));
+  @if ($image != false){
+	@if ($size != false ){
+	  background-size: $size;
+	}
+  }
+};
+
+@mixin snav-border($color: $snav-item-border-color, $width: $snav-item-border-width, $style: $snav-item-border-style, $top: $snav-item-border-top, $right: $snav-item-border-right, $bottom: $snav-item-border-bottom, $left: $snav-item-border-left){
+	
+	$top: if( $top!=false, $width, 0);
+	$right: if($right!=false, $width, 0);
+	$bottom: if($bottom!=false, $width, 0);
+	$left: if($left!=false, $width, 0);
+
+	
+	border-width: $top $right $bottom $left;
+	border-style: $style; 
+	border-color: $color;
+}
+
+@mixin icon-spin($speed: 2s){
+	animation: fa-spin $speed infinite linear;
+}
+
+@mixin submenu-alternative($active-color: $mmenu-sub-active-color, $border-color: $mmenu-sub-border-color){
+	background: transparent;
+	color: $active-color;
+
+	&:after{
+		content:'';
+		width: 0;
+		height: 0;
+		border: 6px solid transparent;
+		border-bottom-color: $border-color;
+		position: absolute;
+		bottom: 0;
+		left: 45%;
+	}
+
+	&:only-child:after{
+		content: none;
+	}
+}
+
+@mixin btn-download($bg-color:$btn-download-bg, $color:$button-primary-font-color){
+	border-radius: 20px;
+	padding: 5px 10px 5px 20px;
+	background:$bg-color;
+	color: $color;
+
+	&:hover{
+		background:darken($bg-color, 15%);
+		color: $color;
+	}
+}
+
+
+@mixin font-face( $font-name: false, $font-ttf: false, $font-eot: false, $font-woff: false, $font-svg: false ){ 
+	@font-face {
+	  font-family: $font-name;
+	  src: url('../fonts/#{$font-eot}');
+	  src: url('../fonts/' $font-eot '#iefix') format('embedded-opentype'),
+	       url('../fonts/' $font-woff) format('woff'),
+	       url('../fonts/' $font-ttf) format('truetype'),
+	       url('../fonts/' $font-svg '#' $font-name) format('svg');
+	  font-weight: normal;
+	  font-style: normal;
+	}
+}
