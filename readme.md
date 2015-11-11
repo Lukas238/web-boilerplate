@@ -80,8 +80,6 @@ $	gulp build
 
 - [Git]
 - [Node.js]
-- [Ruby]
-- [Compass] for [Ruby]
 - [Gulp] for [Node.js]
 - [Bower] for [Node.js]
 
@@ -106,8 +104,6 @@ To view this document more easily, install chrome [Markdown Preview Plus] plugin
 
 [Git]: http://git-scm.com/download/win
 [Node.js]: http://nodejs.org/dist/v0.12.4/node-v0.12.4-x86.msi
-[Ruby]: http://dl.bintray.com/oneclick/rubyinstaller/rubyinstaller-2.2.2.exe
-[Compass]: http://compass-style.org/install/
 [Gulp]: https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md
 [Bower]: http://bower.io/search/
 
