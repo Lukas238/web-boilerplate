@@ -1,10 +1,9 @@
-.sass-cache
 node_modules
+src/vendors
 dev
-src\vendors
-components\css
-components\images
-components\img
-components\js
-components\fonts
-components\favicon.ico
+components/css
+components/images
+components/img
+components/js
+components/fonts
+components/favicon.ico

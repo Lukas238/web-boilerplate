@@ -9,31 +9,37 @@ var config = require('./gulp.config')();
 
 /*	PLUGINS
 *********************/
-var gulp        		= require('gulp'),
+var gulp        	= require('gulp'),
 	plumber     	= require('gulp-plumber'),
-	notify      		= require('gulp-notify'),
-	run         		= require('run-sequence'),
-	compass     	= require('gulp-compass'),
-	sass     			= 	require('gulp-sass'),
+	notify      	= require('gulp-notify'),
+	run         	= require('run-sequence'),
+	sass     		= require('gulp-sass'),
+	purge 			= require('gulp-css-purge'),
 	autoprefixer	= require('gulp-autoprefixer'),
 	rename      	= require('gulp-rename'),
 	minifyCSS   	= require('gulp-minify-css'),
 	concat      	= require('gulp-concat'),
 	changed     	= require('gulp-changed'),
-	browserSync = require('browser-sync').create(),
-	uglify      		= require('gulp-uglify'),
+	browserSync 	= require('browser-sync').create(),
+	uglify      	= require('gulp-uglify'),
 	imagemin    	= require('gulp-imagemin'),
-	jshint      		= require('gulp-jshint'),
-	fs          		= require('fs'),
-	path        		= require('path'),
-	glob        		= require('glob'),
+	jshint      	= require('gulp-jshint'),
+	fs          	= require('fs'),
+	path        	= require('path'),
+	glob        	= require('glob'),
 	merge       	= require('merge-stream'),
-	del         		= require('del'),
+	del         	= require('del'),
+	gutil 			= require('gulp-util'),
+	ftp 			= require('vinyl-ftp'),
 	package     	= require('./package.json'); 
 	
+var reload  		= browserSync.reload({stream:true});
 
-/*	ERROR HANDLING
+	
+/*	FUNCTIONS
 ************************************************/
+
+//	ERROR HANDLING
 var gulp_src = gulp.src;	
 gulp.src = function() {
 	return gulp_src.apply(gulp, arguments)
@@ -44,33 +50,46 @@ gulp.src = function() {
 	}))
 };
 
+
+// HELPER FUNCTION TO BUILD AN FTP CONNECTION
+function getFtpConnection() {  
+    return ftp.create({
+        host: config.deploy.live.host,
+        port: config.deploy.live.port,
+        user: config.deploy.live.user,
+        password: config.deploy.live.password,
+        parallel: 5,
+        log: gutil.log
+    });
+}
+
 /******************************
 	SUB-TASKS 
 ******************************/
 
 //	CLEAN: DEV
-gulp.task('clean:dev', function(cb){
-	del(config.dev+'/*', cb);
+gulp.task('clean:dev', function(){
+	del.sync(config.dev+'/*');
 });
 
+//	CLEAN: DIST
+gulp.task('clean:dist', function(){
+	del.sync(config.dist+'/**/');
+});
+
+
 //	CLEAN: COMP
-gulp.task('clean:comp', function(cb){
-	del([
+gulp.task('clean:comp', function(){
+	del.sync([
 		config.comp+'/*',
 		'!'+config.comp+'/**/*.html'
 	], cb);
 });
 
 
-//	CLEAN: FRONT
-gulp.task('clean:build', function(cb){
-	del(config.dist+'/*', {force: true}, cb);
-});
-
-
-//	HTML
+// HTML	
 gulp.task('html', function () {
-	return gulp.src(config.src+'/**/*.html')
+	return gulp.src(config.src+'/*.html')
 	.pipe(changed(config.wf))
 	.pipe(gulp.dest(config.wf))
 	.pipe(browserSync.reload({stream:true}));
@@ -78,66 +97,63 @@ gulp.task('html', function () {
 
 
 //	SASS-INCLUDE
-//	Import all the componentes files into the file _all.scss.
-var sass_includes_runed = false;
 gulp.task('sass-includes', function (callback) {
+	var all = '_all.scss';
+	fs.writeFile(
+		config.paths.src_scss+'/'+config.comp+'/'+all,
+		'/** This is a dynamically generated file **/\n\n',
+		{ overwrite: true },
+		function (err) {		
+			glob(config.src+'/scss/'+config.comp+'/' + all,
+				function (error, files) {
+					files.forEach(function (allFile) {
+						var directory = path.dirname(allFile);
+						var partials = fs.readdirSync(directory).filter(function (file) {
+							return (
+								// Exclude the dynamically generated file
+								file !== all &&
+								// Only include _*.scss files
+								path.basename(file).substring(0, 1) === '_' &&
+								path.extname(file) === '.scss'
+							);
+						});
+						// Append import statements for each partial
+						partials.forEach(function (partial) {
+							fs.appendFileSync(allFile, '@import "' + partial + '";\n');
+						});
+					});
+				}
+			);
+		}
+	);
+	callback();
 	
-	if(sass_includes_runed == true){ callback(); return;}
-	sass_includes_runed = true;
+	//To run this function just one time
+	/*
+	gulp.task('sass-includes', function (callback) {
+		callback();
+	})
+	*/
 	
-	var comps_list = '_all';
-	var comps_list_path = config.paths.src_scss + '/' + config.comp + '/' +comps_list + '.scss';
-	
-	fs.writeFile(comps_list_path, '/** This is a dynamically generated file **/\n\n', { overwrite: true }, function (err) {		
-		glob(config.paths.src_scss + '/' + config.comp + '/_*.scss', function (error, files) {
-			var partials = [];
-			files.forEach(function (allFile) {
-				var filename = allFile.split('\\').pop().split('/').pop().split('.').shift();
-				if ( filename != comps_list ){ 
-					partials.push( filename );
-				}			
-			});
-			// Append import statements for each partial
-			var import_list = '';
-			partials.forEach(function (partial) {
-				import_list += '@import "' + partial + '";\n'; 
-			});
-			fs.appendFileSync(comps_list_path, import_list);
-		});
-	});
-	callback();	
 });
 
 //	SCSS
 gulp.task('scss', ['sass-includes'], function () {
 	
 	return gulp.src(config.paths.src_scss+'/styles.scss')
-	
-	/*
-	.pipe(compass({
-		project: __dirname,
-		logging: false,
-		sourcemap: false,
-		import_path: config.paths.sass_includes,
-		sass: config.paths.src_scss,
-		css: config.wf+config.paths.dest_css
-    }))
-	*/
-	
 	.pipe(sass({
 		includePaths: config.paths.sass_includes,
 		errLogToConsole: true
 	}))
-	
-	
+	.pipe(purge())
 	.pipe(autoprefixer('last 4 version'))
-	.pipe(gulp.dest(config.wf+config.paths.dest_css))
+	.pipe(gulp.dest( config.wf + config.paths.dest_css ))
 	.pipe(minifyCSS({
 		keepSpecialComments: 1,
 		processImport: false
 	}))
 	.pipe(rename({ suffix: '.min' }))
-	.pipe(gulp.dest(config.wf+config.paths.dest_css))
+	.pipe(gulp.dest( config.wf + config.paths.dest_css ))
 	.pipe(browserSync.reload({stream:true}));
 	
 });
@@ -145,11 +161,11 @@ gulp.task('scss', ['sass-includes'], function () {
 
 // JAVASCRIPT
 gulp.task('js', function(){
-	return gulp.src(config.paths.src_js+'/scripts.js')
+	return gulp.src(config.paths.src_js+'/**/*.js')
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter('jshint-stylish'))
     .pipe(gulp.dest(config.wf+config.paths.dest_js))
-    .pipe(uglify())
+	.pipe(uglify())
     .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest(config.wf+config.paths.dest_js))
 	.pipe(browserSync.reload({stream:true}));
@@ -157,50 +173,30 @@ gulp.task('js', function(){
 
 
 //	IMAGES_OPTIMIZE
-//	Compressing images. Handle SVG files too.
 gulp.task('images_optimize', function(tmp) {
-    return gulp.src([
-		config.paths.images+'/*.jpg',
-		config.paths.images+'/*.png'
-	])
-    .pipe(imagemin({ optimizationLevel: 5, progressive: true, interlaced: true }))
-	.pipe(gulp.dest(config.wf+config.paths.dest_images));
+    return gulp.src(config.paths.img+'/*.{jpg,png,gif}')
+    .pipe(imagemin({
+		optimizationLevel: 5,
+		progressive: true,
+		interlaced: true 
+	}))
+	.pipe(gulp.dest(config.wf+config.paths.dest_img));
 });
 
 
 // IMAGES
-gulp.task('images', function() {
-
-    return merge(
-	
-		//IMAGES
-		gulp.src( config.files.images + '/**/*' )
-		.pipe(gulp.dest(config.wf+config.paths.dest_images))
-		.pipe(browserSync.reload({stream:true})),
-		
-		//IMG
-		gulp.src( config.files.img + '/**/*' )
-		.pipe(gulp.dest(config.wf+config.paths.dest_img))
-		.pipe(browserSync.reload({stream:true}))
-		
-	); //End merge
+gulp.task('images', ['images_optimize'], function() {
+    return gulp.src( config.files.img )
+    .pipe(gulp.dest(config.wf+config.paths.dest_img))
+	.pipe(browserSync.reload({stream:true}));
 });
+
 
 
 // VENDORS
 gulp.task('vendors', function(){
 	return merge(
-
-		// IMAGES
-		gulp.src( config.files.vendors.images )
-		.pipe(changed( config.wf+config.paths.dest_images ))
-		.pipe(gulp.dest( config.wf+config.paths.dest_images )),
-		
-		// IMG
-		gulp.src( config.files.vendors.img )
-		.pipe(changed( config.wf+config.paths.dest_img ))
-		.pipe(gulp.dest( config.wf+config.paths.dest_img )),
-		
+	
 		//	SCRIPTS
 		gulp.src( config.files.vendors.js )
 		.pipe(concat('vendors.js', {newLine: ';'}))
@@ -217,41 +213,25 @@ gulp.task('vendors', function(){
 		.pipe(rename({ suffix: '.min' }))
 		.pipe(gulp.dest(config.wf+config.paths.dest_css)),
 		
+		// IMAGES
+		gulp.src( config.files.vendors.img )
+		.pipe(changed( config.wf+config.paths.dest_img ))
+		.pipe(gulp.dest( config.wf+config.paths.dest_img )),
+		
 		//	FONTS
 		gulp.src(config.files.vendors.fonts)
 		.pipe(changed( config.wf+config.paths.dest_fonts ))
 		.pipe(gulp.dest( config.wf+config.paths.dest_fonts ))
-		
 	
 	); //End merge
 });
 
-//	STANDALONE FILES
-gulp.task('standalone', ['standalone_js', 'standalone_vendors_js', 'standalone_misc']);
-
-
-
-// STANDALONE: SCRIPTS
-gulp.task('standalone_js', function(){
-		return gulp.src( config.files.js )
-		//.pipe(changed( config.wf+config.paths.dest_js ))
-		.pipe(gulp.dest( config.wf+config.paths.dest_js ));
+// CSS STYLES
+gulp.task('css', function(){
+	gulp.src( config.files.css )
+	.pipe(changed( config.wf+config.paths.dest_css ))
+	.pipe(gulp.dest( config.wf+config.paths.dest_css ));
 });
-
-// STANDALONE: VENDORS SCRIPTS
-gulp.task('standalone_vendors_js', function(){
-	return gulp.src(  config.files.vendors.standalone_js )
-		.pipe(changed( config.wf+config.paths.dest_js ))
-		.pipe(gulp.dest( config.wf+config.paths.dest_js ));
-});
-
-// STANDALONE: MISC
-gulp.task('standalone_misc', function(){
-	return	gulp.src( config.files.misc )
-		.pipe(changed( config.wf  ))
-		.pipe(gulp.dest( config.wf ));
-});
-
 
 
 //	FONTS
@@ -262,23 +242,31 @@ gulp.task('fonts', function () {
 	.pipe(browserSync.reload({stream:true}));
 });
 
-//	SCSS SOURCECES
-gulp.task('scss:sources', function () {
+
+//	STANDALONE FILES
+gulp.task('standalone', function(){
 	return merge(
+
+		// STANDALONE: MISC
+		gulp.src( config.files.misc )
+		.pipe(changed( config.wf  ))
+		.pipe(gulp.dest( config.wf )),
 		
-		//SCSS
-		gulp.src(config.paths.src_scss+'/**/*' )
-		.pipe(gulp.dest( config.wf+'/sources/scss' ))
-		.pipe(browserSync.reload({stream:true})),
+		// STANDALONE: CSS
+		gulp.src( config.files.css )
+		.pipe(changed( config.wf  ))
+		.pipe(gulp.dest( config.wf+config.paths.dest_css )),
 		
-		//Vendors SCSS
-		gulp.src(config.paths.sass_includes+'/**/*')
-		.pipe(gulp.dest( config.wf+'/sources/sass_includes' ))
-		.pipe(browserSync.reload({stream:true}))
-	)
+		// STANDALONE: JS
+		gulp.src( config.files.js )
+		.pipe(changed( config.wf  ))
+		.pipe(gulp.dest( config.wf+config.paths.dest_js ))
+		
+	); //End merge	
 });
 
 
+//	BROWSER-SYNC
 gulp.task('browser-sync', function() {
     browserSync.init(null, {
 		notify: false,
@@ -290,10 +278,6 @@ gulp.task('browser-sync', function() {
 });
 
 
-gulp.task('bs-reload', function () {
-    browserSync.reload();
-});
-
 
 /******************************************
 	TASKS
@@ -301,23 +285,20 @@ gulp.task('bs-reload', function () {
 
 
 // DEFAULT
-gulp.task('default', ['temp']);
-
-
-// TEMPLATES
-gulp.task('temp', ['clean:dev'], function(){
+gulp.task('default', ['clean:dev'], function(){
 	
 	config.wf = config.dev;
-	config.directory_listing = true;
+	config.directory_listing = false;
 	
-	run(['html', 'scss', 'js', 'images', 'fonts', 'vendors', 'standalone', 'browser-sync'], function(){		
-		gulp.watch(config.src+'/**/*.html', ['html']);
-		gulp.watch(config.src+'/scss/**/*.scss', ['scss']);
-		gulp.watch(config.src+'/js/**/*.js', ['js', 'standalone_js']);
-		gulp.watch(config.src+'/images/**/*', ['images']);
+	run(['html', 'scss', 'css', 'js', 'images', 'fonts', 'vendors', 'standalone', 'browser-sync'], function(){		
+		gulp.watch(config.src+'/*.html', ['html']);
+		gulp.watch(config.src+'/scss/**/*', ['scss']);
+		gulp.watch(config.src+'/css/**/*', ['css']);
+		gulp.watch(config.src+'/js/**/*.js', ['js']);
+		gulp.watch(config.src+'/img/**/*', ['images']);
 	});
+	
 });
-
 
 
 
@@ -327,19 +308,35 @@ gulp.task('comp', ['clean:comp'], function () {
 	config.wf = config.comp;
 	config.directory_listing = true;
 	
-	run(['scss', 'js', 'images', 'fonts', 'vendors', 'standalone', 'browser-sync'], function () {
-		gulp.watch(config.wf + '/**/*.html', ['bs-reload']);
-		gulp.watch(config.src + '/scss/**/*.scss', ['scss']);
-		gulp.watch(config.src + '/js/**/*.js', ['js', 'standalone_js']);
-		gulp.watch(config.src + '/images/**/*', ['images']);
-	});	
+	run(['scss', 'css', 'js', 'images', 'fonts', 'vendors', 'standalone', 'browser-sync'], function(){		
+		gulp.watch(config.src+'/*.html', ['html']);
+		gulp.watch(config.src+'/scss/**/*.scss', ['scss']);
+		gulp.watch(config.src+'/css/**/*.css', ['css']);
+		gulp.watch(config.src+'/js/**/*.js', ['js']);
+		gulp.watch(config.src+'/img/**/*', ['images']);
+	});
+
 });
 
 
-// BUILD:FRONT
-gulp.task('build', ['clean:build'], function(){
+// DIST
+gulp.task('dist', ['clean:dist'], function(){
 	config.wf = config.dist;
-	run(['html', 'scss', 'js', 'images', 'fonts', 'vendors', 'standalone']);
+	run(['html', 'scss', 'css', 'js', 'images', 'fonts', 'vendors', 'standalone']);
 });
 
+
+// DEPLOY
+gulp.task('deploy', ['dist'], function(){
+	config.wf = config.dist;
+	run(['html', 'scss', 'css', 'js', 'images', 'fonts', 'vendors', 'standalone'], function(){
+		var conn = getFtpConnection();
+		return gulp.src(config.deploy.live.localFilesGlob,{
+			base: './'+config.dist,
+			buffer: false
+		})
+		.pipe(conn.newer( config.deploy.live.remoteFolder )) // only upload newer files 
+		.pipe(conn.dest( config.deploy.live.remoteFolder ));
+	});
+});
 

@@ -1,23 +1,18 @@
 {
-  "name": "future-brand",
-  "title": "FutureBrand: Brand Asset Manager",
-  "version": "1.0.0",
+  "name": "c238-web-boilerplate",
+  "title": "Web Boilerplate",
+  "version": "1.0.1",
   "repository": {
-    "type": "svn",
-    "url": "https://mrmserver2.la.corp.ipgnetwork.com/svn/buemrm/FutureBrand"
+    "type": "git",
+    "url": "git@github.com:Lukas238/web-boilerplate.git"
   },
-  "author": "Lucas Dasso <lucas.dasso@mrm-mccann.com>",
-  "contributors": [
-    {
-      "name": "Pablo Ortiz",
-      "email": "pablo.ortiz@mrm-mccann.com"
-    }
-  ],
+  "author": "Lucas Dasso <dasso.lucas@gmail.com> (http://www.c238.com.ar)",
   "keywords": [
-    "futurebrand",
-    "asset",
-    "manager",
-    "mrm"
+    "web",
+    "boilerplate",
+    "sass",
+    "boostrap",
+    "gulp"
   ],
   "main": "gulpfile.js",
   "scripts": {
@@ -33,8 +28,8 @@
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^1.0.1",
     "gulp-changed": "^1.2.1",
-    "gulp-compass": "^2.1.0",
     "gulp-concat": "^2.5.2",
+    "gulp-css-purge": "^1.0.27",
     "gulp-imagemin": "^2.3.0",
     "gulp-jshint": "^1.11.1",
     "gulp-minify-css": "^0.3.13",
@@ -47,6 +42,12 @@
     "jshint-stylish": "^2.0.1",
     "merge-stream": "^0.1.7",
     "path": "^0.11.14",
-    "run-sequence": "^1.1.2"
-  }
+    "run-sequence": "^1.1.2",
+    "vinyl-ftp": "^0.4.5"
+  },
+  "bugs": {
+    "url": "https://github.com/Lukas238/web-boilerplate/issues"
+  },
+  "homepage": "https://github.com/Lukas238/web-boilerplate",
+  "description": "Web Boilerplate"
 }

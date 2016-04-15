@@ -20,12 +20,13 @@
     "bootstrap-sass": "~3.3.5"
   },
   "dependencies": {
-    "jquery-validation": "~1.14.0",
+	"jquery": "^2.2.1",
+    "bootstrap": "^3.3.6",
+    "bootstrap-sass": "^3.3.6",
+    "bootstrap-select": "^1.10.0",
     "better-input-file": "*",
-    "bootstrap-select": "~1.7.3",
-    "html5shiv": "~3.7.2",
-    "jquery": "1.11.3",
-    "respond": "Respond#~1.4.2",
-    "slick.js": "~1.5.8"
+    "font-awesome": "fontawesome#^4.5.0",
+    "magnific-popup": "^1.1.0",
+    "slick-carousel": "^1.5.9"
   }
 }

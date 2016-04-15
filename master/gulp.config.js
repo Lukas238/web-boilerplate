@@ -3,9 +3,20 @@ module.exports = function () {
     var config = {
 		src:		'src', //Sources
 		dev:		'dev',	//Develop
-		comp:	'components', //Components
+		comp:		'components', //Components
 		dist:		'dist',	//Build
 		directory_listing: false
+	};
+	
+	config.deploy = {
+			live : {
+				host 			: '111.222.333.444',
+				user 			: "username",
+				password 		: "password",  
+				port 			: 21,
+				localFilesGlob 	: ['./dist/**/*'],
+				remoteFolder 	: "/www/mysite/rootfolder",
+			}
 	};
 	
 	config.wf = config.dev; //Default Working Folder
@@ -35,7 +46,7 @@ module.exports = function () {
 			config.paths.src_images
 		],
 		img: [
-			config.paths.src_img
+			config.paths.src_img + '/**/*'
 		],
 		css: [
 			config.paths.src_css +'/*.css'
@@ -45,45 +56,46 @@ module.exports = function () {
 			'!' + config.paths.src_js + '/scripts.js'
 		],
 		fonts: [
-			config.paths.src_fonts + '/*'
+			config.paths.src_fonts + '/**/*'
 		],
 		misc: [
-			config.src + '/favicon.ico'
+			config.src + '/*',
+			'!' + config.src + '/*.{htm,html}'
 		],
 		vendors: {
 			images: [
-				config.paths.src_vendors + '/slick.js/slick/ajax-loader.gif'
+				config.paths.src_vendors + '/slick-carousel/slick/ajax-loader.gif'
 			],
 			img: [],
 			css: [
-				config.paths.src_vendors + '/slick.js/slick/slick.css',
-				config.paths.src_vendors+ '/slick.js/slick/slick-theme.css',
-				config.paths.src_vendors + '/bootstrap-select/dist/css/bootstrap-select.css'
+				config.paths.src_vendors + '/bootstrap/dist/css/bootstrap.css',
+				config.paths.src_vendors + '/font-awesome/css/font-awesome.css',
+				config.paths.src_vendors + '/bootstrap-select/dist/css/bootstrap-select.css',
+				config.paths.src_vendors + '/magnific-popup/dist/magnific-popup.css',
+				config.paths.src_vendors + '/slick-carousel/slick/slick.css',
+				config.paths.src_vendors + '/slick-carousel/slick/slick-theme.css'
 			],
 			js: [
 				config.paths.src_vendors + '/jquery/dist/jquery.js',
-				config.paths.src_vendors + '/slick.js/slick/slick.js',
-				config.paths.src_vendors + '/better-input-file/dist/betterInputFileButton.js',
+				config.paths.src_vendors + '/bootstrap/dist/js/bootstrap.js',
 				config.paths.src_vendors + '/bootstrap-select/dist/js/bootstrap-select.js',
-				config.paths.src_vendors + '/jquery-validation/dist/jquery.validate.js'
+				config.paths.src_vendors + '/magnific-popup/dist/jquery.magnific-popup.js',
+				config.paths.src_vendors + '/slick-carousel/slick/slick.js',
 			],
 			fonts: [
-				config.paths.src_vendors + '/bootstrap-sass/assets/fonts/bootstrap/*',
-				config.paths.src_vendors + '/slick.js/slick/fonts/*'
+				config.paths.src_vendors + '/bootstrap/fonts/*',
+				config.paths.src_vendors + '/font-awesome/fonts/*',
+				config.paths.src_vendors + '/slick-carousel/slick/fonts/*'
 			],
-			standalone_images: [],
-			standalone_img: [],
-			standalone_css: [],
-			standalone_js: [
-				config.paths.src_vendors + '/html5shiv/dist/html5shiv.min.js',
-				config.paths.src_vendors + '/respond/dest/respond.min.js'
-			]
+			standalone_images: 	[],
+			standalone_img: 	[],
+			standalone_css: 	[],
+			standalone_js: 		[]
 		}
 	};
 	
     return config;
 };
-
 
 
 
