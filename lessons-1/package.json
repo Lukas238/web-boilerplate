@@ -1,0 +1,30 @@
+{
+  "name": "web-boilerplate",
+  "title": "Web Boilerplate: Lesson #1",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Lukas238/web-boilerplate.git"
+  },
+  "author": "Lucas Dasso <dasso.lucas@gmail.com> (http://www.c238.com.ar)",
+  "keywords": [
+    "web",
+    "boilerplate",
+    "sass",
+    "gulp"
+  ],
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-sass": "^2.2.0"
+  },
+  "bugs": {
+    "url": "https://github.com/Lukas238/web-boilerplate/issues"
+  },
+  "homepage": "https://github.com/Lukas238/web-boilerplate",
+  "description": "Web Boilerplate: Lesson #1"
+}
